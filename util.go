@@ -172,8 +172,19 @@ func (l *logHandler) outputFile() {
 	} else {
 		fileSize = -1
 	}
+	var paths string
+	if strings.Contains(fileName, "/") {
+		t := strings.Split(fileName, "/")
+		for _, v := range t[:len(t)-1] {
+			if paths == "" {
+				paths = v
+			} else {
+				paths = paths + "/" + v
+			}
+		}
+	}
 	if fileSize >= setSize {
-		err := os.Rename(fileName, nowName+".log")
+		err := os.Rename(fileName, paths+"/"+nowName+".log")
 		if err != nil {
 			log.Println("Failed to change file name")
 			return
