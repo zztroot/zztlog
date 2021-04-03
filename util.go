@@ -63,7 +63,7 @@ func (l *logHandler) output(name, s string) {
 		fileList := strings.Split(file, "/")
 		f = fileList[len(fileList)-1]
 	}
-	l.buf = append(l.buf, " ["...)
+	l.buf = append(l.buf, "["...)
 	l.buf = append(l.buf, name...)
 	l.buf = append(l.buf, "] "...)
 	nowTime := time.Now().Format(config.TimeFormat + " ")
@@ -121,11 +121,11 @@ func (l *logHandler) handlerOutput(name string) bool {
 		if !config.FatalOutput {
 			return false
 		}
-	case "Info ":
+	case "Info-":
 		if !config.InfoOutput {
 			return false
 		}
-	case "Warn ":
+	case "Warn-":
 		if !config.WarnOutput {
 			return false
 		}
@@ -143,9 +143,9 @@ func (l *logHandler) outputCmd(name string) {
 			temp = []byte(color.Magenta.Sprintf(string(l.buf)))
 		case "Fatal":
 			temp = []byte(color.Red.Sprintf(string(l.buf)))
-		case "Info ":
+		case "Info-":
 			temp = []byte(color.Green.Sprintf(string(l.buf)))
-		case "Warn ":
+		case "Warn-":
 			temp = []byte(color.Yellow.Sprintf(string(l.buf)))
 		}
 	}else {
@@ -207,13 +207,13 @@ func (l *logHandler) debug(s string) {
 func (l *logHandler) info(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Info ", s)
+	l.output("Info-", s)
 }
 
 func (l *logHandler) warn(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Warn ", s)
+	l.output("Warn-", s)
 }
 
 func (l *logHandler) fatal(s string) {
