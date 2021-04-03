@@ -77,6 +77,7 @@ func main() {
 
 ```
 #### 输出
+```
 [Info-] 2021/04/04 01:19:58 main.go:11 [main.main] 123456
 [Info-] 2021/04/04 01:19:58 main.go:12 [main.main] 我+你
 [Debug] 2021/04/04 01:19:58 main.go:13 [main.main] 123456
@@ -95,5 +96,6 @@ func main() {
 [Error] 2021/04/04 01:19:58 main.go:16 [main.main] 我+你
 [Fatal] 2021/04/04 01:19:58 main.go:17 [main.main] 123456
 [Fatal] 2021/04/04 01:19:58 main.go:18 [main.main] 我+你
+```
 
 
