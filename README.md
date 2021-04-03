@@ -25,23 +25,23 @@ go get github.com/zztroot/zztlog
 }
 ```
 #### 写入文件相关:
-file_output:是否输出到文件(默认为false)  
-save_file_name:写入文件的名称(默认zztlog.log)  
-max_size_m：写入文件的最大大小，单位M，当达到最大时将会写入新的日志文件中。(默认大小100M)    
+file_output: 是否输出到文件(默认为false)  
+save_file_name: 写入文件的名称(默认zztlog.log)  
+max_size_m: 写入文件的最大大小，单位M，当达到最大时将会写入新的日志文件中。(默认大小100M)    
 
 #### 写入终端相关:
-cmd_output:是否输出到终端(默认为true)  
-colour_output:输出是否带颜色(默认为false)  
+cmd_output: 是否输出到终端(默认为true)  
+colour_output: 输出是否带颜色(默认为false)  
 
 #### 公共
-time_format:输出时间格式(默认格式:2006-01-02 15:04:05)  
-file_all_path_output:是否显示文件全路径(默认只显示文件名称faslse)  
-func_name_output:是否显示函数名称(默认不显示false)  
-error_output:是否输出error信息(默认为true)  
-fatal_output:是否输出fatal信息(默认为true)  
-warn_output:是否输出warn信息(默认为true)  
-info_output:是否输出info信息(默认为true)  
-debug_output:是否输出debug信息(默认为true)  
+time_format: 输出时间格式(默认格式:2006-01-02 15:04:05)  
+file_all_path_output: 是否显示文件全路径(默认只显示文件名称faslse)  
+func_name_output: 是否显示函数名称(默认不显示false)  
+error_output: 是否输出error信息(默认为true)  
+fatal_output: 是否输出fatal信息(默认为true)  
+warn_output: 是否输出warn信息(默认为true)  
+info_output: 是否输出info信息(默认为true)  
+debug_output: 是否输出debug信息(默认为true)  
 
 ## 例子
 ```go
