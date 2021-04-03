@@ -76,4 +76,24 @@ func main() {
 }
 
 ```
+#### 输出
+[Info-] 2021/04/04 01:19:58 main.go:11 [main.main] 123456
+[Info-] 2021/04/04 01:19:58 main.go:12 [main.main] 我+你
+[Debug] 2021/04/04 01:19:58 main.go:13 [main.main] 123456
+[Debug] 2021/04/04 01:19:58 main.go:14 [main.main] 我+你
+[Error] 2021/04/04 01:19:58 main.go:15 [main.main] 123456
+[Error] 2021/04/04 01:19:58 main.go:16 [main.main] 我+你
+[Fatal] 2021/04/04 01:19:58 main.go:17 [main.main] 123456
+[Fatal] 2021/04/04 01:19:58 main.go:18 [main.main] 我+你
+[Warn-] 2021/04/04 01:19:58 main.go:19 [main.main] 123456
+[Warn-] 2021/04/04 01:19:58 main.go:20 [main.main] 我+你
+[Info-] 2021/04/04 01:19:58 main.go:11 [main.main] 123456
+[Info-] 2021/04/04 01:19:58 main.go:12 [main.main] 我+你
+[Debug] 2021/04/04 01:19:58 main.go:13 [main.main] 123456
+[Debug] 2021/04/04 01:19:58 main.go:14 [main.main] 我+你
+[Error] 2021/04/04 01:19:58 main.go:15 [main.main] 123456
+[Error] 2021/04/04 01:19:58 main.go:16 [main.main] 我+你
+[Fatal] 2021/04/04 01:19:58 main.go:17 [main.main] 123456
+[Fatal] 2021/04/04 01:19:58 main.go:18 [main.main] 我+你
+
 
