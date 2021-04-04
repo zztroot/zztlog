@@ -9,19 +9,22 @@ go get github.com/zztroot/zztlog
 ## 配置文件说明(如果没有配置文件，将输出默认格式)
 ```json
 {
-  "save_file_name": "zztlog.log",
-  "time_format": "2006/01/02 15:04:05",
-  "max_size_m":100,
-  "file_output": false,
-  "cmd_output": true,
-  "file_all_path_output": false,
-  "colour_output": false,
-  "func_name_output": false,
-  "error_output": true,
-  "fatal_output": true,
-  "warn_output": true,
-  "info_output": true,
-  "debug_output": true
+  "log_config": {
+    "save_file_name": "log/zztlog.log",
+    "time_format": "2006/01/02 15:04:05",
+    "max_size_m":1,
+    "prefix": "[测试]",
+    "file_output": true,
+    "cmd_output": true,
+    "file_all_path_output": true,
+    "colour_output": true,
+    "func_name_output": true,
+    "error_output": true,
+    "fatal_output": true,
+    "warn_output": true,
+    "info_output": true,
+    "debug_output": true
+  }
 }
 ```
 #### 写入文件相关:
@@ -34,6 +37,7 @@ cmd_output: 是否输出到终端(默认为true)
 colour_output: 输出是否带颜色(默认为false)  
 
 #### 公共
+prefix:输出前缀(默认为空)  
 time_format: 输出时间格式(默认格式:2006-01-02 15:04:05)  
 file_all_path_output: 是否显示文件全路径(默认只显示文件名称faslse)  
 func_name_output: 是否显示函数名称(默认不显示false)  
