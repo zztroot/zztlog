@@ -37,7 +37,7 @@ cmd_output: 是否输出到终端(默认为true)
 colour_output: 输出是否带颜色(默认为false)  
 
 #### 公共
-prefix:输出前缀(默认为空)  
+prefix: 输出前缀(默认为空)  
 time_format: 输出时间格式(默认格式:2006-01-02 15:04:05)  
 file_all_path_output: 是否显示文件全路径(默认只显示文件名称faslse)  
 func_name_output: 是否显示函数名称(默认不显示false)  
