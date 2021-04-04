@@ -51,55 +51,40 @@ debug_output: 是否输出debug信息(默认为true)
 ```go
 package main
 
-import "zztlog"
+import "github.com/zztroot/zztlog"
 
 func main() {
-	err := zztlog.InitConfig("zztlog.json") //可配置
-	if err != nil {
-		zztlog.Debug(err)
+	//配置，如果不配置将输出默认格式
+	if err := zztlog.InitConfig("zztlog.json"); err != nil {
+		zztlog.Error(err)
+		return
 	}
-	zztlog.Info(123456)
-  
-	zztlog.InfoF("%s+%s", "我", "你")
-  
-	zztlog.Debug(123456)
-  
-	zztlog.DebugF("%s+%s", "我", "你")
-  
-	zztlog.Error(123456)
-  
-	zztlog.ErrorF("%s+%s", "我", "你")
-  
-	zztlog.Fatal(123456)
-  
-	zztlog.FatalF("%s+%s", "我", "你")
-  
-	zztlog.Warn(123456)
-  
-	zztlog.WarnF("%s+%s", "我", "你")
+
+	//可以获取结构体
+	loggler := zztlog.Default()
+	loggler.Info(456789)
+	loggler.Error("sdfdsfsdffffffffffff")
+
+	//也可以直接使用
+	zztlog.Info(123)
+	zztlog.Error(456545646)
+	zztlog.ErrorF(`%s`, "你是我的眼睛")
 }
+
 
 ```
 #### 输出
 ```
-[Info-] 2021/04/04 01:19:58 main.go:11 [main.main] 123456
-[Info-] 2021/04/04 01:19:58 main.go:12 [main.main] 我+你
-[Debug] 2021/04/04 01:19:58 main.go:13 [main.main] 123456
-[Debug] 2021/04/04 01:19:58 main.go:14 [main.main] 我+你
-[Error] 2021/04/04 01:19:58 main.go:15 [main.main] 123456
-[Error] 2021/04/04 01:19:58 main.go:16 [main.main] 我+你
-[Fatal] 2021/04/04 01:19:58 main.go:17 [main.main] 123456
-[Fatal] 2021/04/04 01:19:58 main.go:18 [main.main] 我+你
-[Warn-] 2021/04/04 01:19:58 main.go:19 [main.main] 123456
-[Warn-] 2021/04/04 01:19:58 main.go:20 [main.main] 我+你
-[Info-] 2021/04/04 01:19:58 main.go:11 [main.main] 123456
-[Info-] 2021/04/04 01:19:58 main.go:12 [main.main] 我+你
-[Debug] 2021/04/04 01:19:58 main.go:13 [main.main] 123456
-[Debug] 2021/04/04 01:19:58 main.go:14 [main.main] 我+你
-[Error] 2021/04/04 01:19:58 main.go:15 [main.main] 123456
-[Error] 2021/04/04 01:19:58 main.go:16 [main.main] 我+你
-[Fatal] 2021/04/04 01:19:58 main.go:17 [main.main] 123456
-[Fatal] 2021/04/04 01:19:58 main.go:18 [main.main] 我+你
+[Info-] 2021/04/04 14:34:12 F:/golang/test/main.go:14 [main.main] 456789
+[Error] 2021/04/04 14:34:13 F:/golang/test/main.go:15 [main.main] sdfdsfsdffffffffffff
+[Debug] 2021/04/04 14:34:13 F:/golang/test/main.go:16 [main.main] 我是debug
+[Info-] 2021/04/04 14:34:13 F:/golang/test/main.go:19 [main.main] 123
+[Error] 2021/04/04 14:34:13 F:/golang/test/main.go:20 [main.main] 456545646
+[Error] 2021/04/04 14:34:13 F:/golang/test/main.go:21 [main.main] 你是我的眼睛
+
 ```
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210404143512599.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDU0NjM0MA==,size_16,color_FFFFFF,t_70#pic_center)
+
 
 
