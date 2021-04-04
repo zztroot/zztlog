@@ -118,11 +118,11 @@ func (l *logHandler) initConfig() {
 func (l *logHandler) handlerOutput(name string) bool {
 	switch name {
 	case ERROR:
-		if !config.LogConfig.DebugOutput {
+		if !config.LogConfig.ErrorOutput {
 			return false
 		}
 	case DEBUG:
-		if !config.LogConfig.ErrorOutput {
+		if !config.LogConfig.DebugOutput {
 			return false
 		}
 	case FATAL:
@@ -220,29 +220,29 @@ func createFile(fileName string) {
 func (l *logHandler) debug(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Debug", s)
+	l.output(DEBUG, s)
 }
 
 func (l *logHandler) info(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Info-", s)
+	l.output(INFO, s)
 }
 
 func (l *logHandler) warn(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Warn-", s)
+	l.output(WARN, s)
 }
 
 func (l *logHandler) fatal(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Fatal", s)
+	l.output(FATAL, s)
 }
 
 func (l *logHandler) error(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output("Error", s)
+	l.output(ERROR, s)
 }
