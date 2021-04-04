@@ -20,8 +20,13 @@ type logHandler struct {
 	isInit bool
 }
 
+type base struct {
+	LogConfig logConfig `json:"log_config"`
+}
+
 type logConfig struct {
 	TimeFormat        string `json:"time_format"`
+	Prefix            string `json:"prefix"`
 	FileOutput        bool   `json:"file_output"`
 	CmdOutput         bool   `json:"cmd_output"`
 	FileAllPathOutput bool   `json:"file_all_path_output"`
@@ -56,22 +61,25 @@ func (l *logHandler) output(name, s string) {
 	}
 	//判断文件路径显示
 	var f string
-	if config.FileAllPathOutput {
+	if config.LogConfig.FileAllPathOutput {
 		f = file
 	} else {
 
 		fileList := strings.Split(file, "/")
 		f = fileList[len(fileList)-1]
 	}
+	if config.LogConfig.Prefix != "" {
+		l.buf = append(l.buf, config.LogConfig.Prefix+" "...)
+	}
 	l.buf = append(l.buf, "["...)
 	l.buf = append(l.buf, name...)
 	l.buf = append(l.buf, "] "...)
-	nowTime := time.Now().Format(config.TimeFormat + " ")
+	nowTime := time.Now().Format(config.LogConfig.TimeFormat + " ")
 	l.buf = append(l.buf, nowTime...)
 	l.buf = append(l.buf, f...)
 	l.buf = append(l.buf, ":"...)
 	l.buf = append(l.buf, strconv.Itoa(line)...)
-	if config.FuncNameOutput {
+	if config.LogConfig.FuncNameOutput {
 		funcName := runtime.FuncForPC(ptr).Name()
 		funcName = path.Base(funcName)
 		l.buf = append(l.buf, " ["...)
@@ -84,10 +92,10 @@ func (l *logHandler) output(name, s string) {
 	}
 
 	//判断是否写入文件还是cmd
-	if config.CmdOutput && config.FileOutput {
+	if config.LogConfig.CmdOutput && config.LogConfig.FileOutput {
 		l.outputCmd(name)
 		l.outputFile()
-	} else if config.FileOutput {
+	} else if config.LogConfig.FileOutput {
 		l.outputFile()
 	} else {
 		l.outputCmd(name)
@@ -97,36 +105,36 @@ func (l *logHandler) output(name, s string) {
 }
 
 func (l *logHandler) initConfig() {
-	config.WarnOutput = true
-	config.InfoOutput = true
-	config.FatalOutput = true
-	config.ErrorOutput = true
-	config.DebugOutput = true
-	config.CmdOutput = true
-	config.MaxSizeM = 100
-	config.TimeFormat = "2006-01-02 15:04:05"
+	config.LogConfig.WarnOutput = true
+	config.LogConfig.InfoOutput = true
+	config.LogConfig.FatalOutput = true
+	config.LogConfig.ErrorOutput = true
+	config.LogConfig.DebugOutput = true
+	config.LogConfig.CmdOutput = true
+	config.LogConfig.MaxSizeM = 100
+	config.LogConfig.TimeFormat = "2006-01-02 15:04:05"
 }
 
 func (l *logHandler) handlerOutput(name string) bool {
 	switch name {
-	case "Debug":
-		if !config.DebugOutput {
+	case ERROR:
+		if !config.LogConfig.DebugOutput {
 			return false
 		}
-	case "Error":
-		if !config.ErrorOutput {
+	case DEBUG:
+		if !config.LogConfig.ErrorOutput {
 			return false
 		}
-	case "Fatal":
-		if !config.FatalOutput {
+	case FATAL:
+		if !config.LogConfig.FatalOutput {
 			return false
 		}
-	case "Info-":
-		if !config.InfoOutput {
+	case INFO:
+		if !config.LogConfig.InfoOutput {
 			return false
 		}
-	case "Warn-":
-		if !config.WarnOutput {
+	case WARN:
+		if !config.LogConfig.WarnOutput {
 			return false
 		}
 	}
@@ -135,20 +143,20 @@ func (l *logHandler) handlerOutput(name string) bool {
 
 func (l *logHandler) outputCmd(name string) {
 	var temp []byte
-	if config.ColourOutput {
+	if config.LogConfig.ColourOutput {
 		switch name {
-		case "Debug":
+		case DEBUG:
 			temp = []byte(color.Cyan.Sprintf(string(l.buf)))
-		case "Error":
+		case ERROR:
 			temp = []byte(color.Magenta.Sprintf(string(l.buf)))
-		case "Fatal":
+		case FATAL:
 			temp = []byte(color.Red.Sprintf(string(l.buf)))
-		case "Info-":
+		case INFO:
 			temp = []byte(color.Green.Sprintf(string(l.buf)))
-		case "Warn-":
+		case WARN:
 			temp = []byte(color.Yellow.Sprintf(string(l.buf)))
 		}
-	}else {
+	} else {
 		temp = l.buf
 	}
 	_, err := l.out.Write(temp)
@@ -160,14 +168,14 @@ func (l *logHandler) outputCmd(name string) {
 func (l *logHandler) outputFile() {
 	nowName := time.Now().Format("20060102150405")
 	fileName := "zztlog.log"
-	if config.SaveFileName != "" {
-		fileName = config.SaveFileName
+	if config.LogConfig.SaveFileName != "" {
+		fileName = config.LogConfig.SaveFileName
 	}
 	fileInfo, e := os.Stat(fileName)
 	var setSize int64
 	var fileSize int64
 	if !os.IsNotExist(e) {
-		setSize = config.MaxSizeM * 1024 * 1024
+		setSize = config.LogConfig.MaxSizeM * 1024 * 1024
 		fileSize = fileInfo.Size()
 	} else {
 		fileSize = -1

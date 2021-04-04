@@ -9,7 +9,7 @@ import (
 
 var (
 	l      logHandler
-	config logConfig
+	config base
 	m      sync.Mutex
 )
 
