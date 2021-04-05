@@ -20,11 +20,11 @@ type logHandler struct {
 	isInit bool
 }
 
-type base struct {
-	LogConfig logConfig `json:"log_config"`
+type BaseConfig struct {
+	LogConfig LogConfig `json:"log_config"`
 }
 
-type logConfig struct {
+type LogConfig struct {
 	TimeFormat        string `json:"time_format"`
 	Prefix            string `json:"prefix"`
 	FileOutput        bool   `json:"file_output"`
@@ -206,13 +206,13 @@ func (l *logHandler) outputFile() {
 func createFile(fileName string) {
 	file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
-		log.Println("File opening failed")
+		log.Panic(err)
 		return
 	}
 	defer file.Close()
 	_, err = file.Write(l.buf)
 	if err != nil {
-		log.Println("File write failed")
+		log.Panic(err)
 		return
 	}
 }

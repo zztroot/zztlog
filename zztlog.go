@@ -9,14 +9,14 @@ import (
 
 var (
 	l      logHandler
-	config base
+	config BaseConfig
 	m      sync.Mutex
 )
 
-type initLog struct {}
+type initLog struct{}
 
-func InitConfig(name string) error {
-	r, err := ioutil.ReadFile(name)
+func InitConfigFile(path string) error {
+	r, err := ioutil.ReadFile(path)
 	if err != nil {
 		return err
 	}
@@ -27,8 +27,25 @@ func InitConfig(name string) error {
 	l.isInit = true
 	return nil
 }
+func InitConfig(b BaseConfig) {
+	handleBaseConfig(&b)
+	config = b
+	l.isInit = true
+}
 
-func Default()*initLog{return &initLog{}}
+func handleBaseConfig(b *BaseConfig) {
+	if !b.LogConfig.CmdOutput {
+		b.LogConfig.CmdOutput = true
+	}
+	if b.LogConfig.TimeFormat == "" {
+		b.LogConfig.TimeFormat = "2006-01-02 15:04:05"
+	}
+	if b.LogConfig.MaxSizeM == 0 {
+		b.LogConfig.MaxSizeM = 100
+	}
+}
+
+func Default() *initLog { return &initLog{} }
 
 func Debug(s ...interface{}) {
 	m.Lock()
