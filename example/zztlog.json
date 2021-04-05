@@ -1,6 +1,6 @@
 {
   "log_config": {
-    "save_file_name": "log/zztlog.log",
+    "save_file_name": "zztlog.log",
     "time_format": "2006/01/02 15:04:05",
     "max_size_m":1,
     "prefix": "[zorm]",

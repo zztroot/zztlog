@@ -1,9 +1,9 @@
 package zztlog
 
 const (
-	ERROR = "Error"
-	DEBUG = "Debug"
-	FATAL = "Fatal"
-	INFO  = "Info-"
-	WARN  = "Warn-"
+	err = "Error"
+	debug = "Debug"
+	fatal = "Fatal"
+	info  = "Info-"
+	warn  = "Warn-"
 )

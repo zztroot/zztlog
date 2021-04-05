@@ -6,13 +6,13 @@ import (
 
 func main() {
 	//通过结构体配置
-	zztlog.InitConfig(zztlog.BaseConfig{LogConfig:zztlog.LogConfig{DebugOutput: true, ErrorOutput: true, CmdOutput: true, ColourOutput: true}})
+	//zztlog.InitConfig(zztlog.BaseConfig{LogConfig:zztlog.LogConfig{DebugOutput: true, ErrorOutput: true, CmdOutput: true, ColourOutput: true}})
 
 	//通过文件配置
-	//err := zztlog.InitConfigFile("zztlog.json")
-	//if err != nil {
-	//	zztlog.Debug(err)
-	//}
+	err := zztlog.InitConfigFile("zztlog.json")
+	if err != nil {
+		zztlog.Debug(err)
+	}
 
 	//如果文件和结构体都未配置，将默认输出
 	zztlog.Info(123456)

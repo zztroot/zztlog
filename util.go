@@ -117,23 +117,23 @@ func (l *logHandler) initConfig() {
 
 func (l *logHandler) handlerOutput(name string) bool {
 	switch name {
-	case ERROR:
+	case err:
 		if !config.LogConfig.ErrorOutput {
 			return false
 		}
-	case DEBUG:
+	case debug:
 		if !config.LogConfig.DebugOutput {
 			return false
 		}
-	case FATAL:
+	case fatal:
 		if !config.LogConfig.FatalOutput {
 			return false
 		}
-	case INFO:
+	case info:
 		if !config.LogConfig.InfoOutput {
 			return false
 		}
-	case WARN:
+	case warn:
 		if !config.LogConfig.WarnOutput {
 			return false
 		}
@@ -145,15 +145,15 @@ func (l *logHandler) outputCmd(name string) {
 	var temp []byte
 	if config.LogConfig.ColourOutput {
 		switch name {
-		case DEBUG:
+		case debug:
 			temp = []byte(color.Cyan.Sprintf(string(l.buf)))
-		case ERROR:
+		case err:
 			temp = []byte(color.Magenta.Sprintf(string(l.buf)))
-		case FATAL:
+		case fatal:
 			temp = []byte(color.Red.Sprintf(string(l.buf)))
-		case INFO:
+		case info:
 			temp = []byte(color.Green.Sprintf(string(l.buf)))
-		case WARN:
+		case warn:
 			temp = []byte(color.Yellow.Sprintf(string(l.buf)))
 		}
 	} else {
@@ -220,29 +220,29 @@ func createFile(fileName string) {
 func (l *logHandler) debug(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output(DEBUG, s)
+	l.output(debug, s)
 }
 
 func (l *logHandler) info(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output(INFO, s)
+	l.output(info, s)
 }
 
 func (l *logHandler) warn(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output(WARN, s)
+	l.output(warn, s)
 }
 
 func (l *logHandler) fatal(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output(FATAL, s)
+	l.output(fatal, s)
 }
 
 func (l *logHandler) error(s string) {
 	l.m.Lock()
 	defer l.m.Unlock()
-	l.output(ERROR, s)
+	l.output(err, s)
 }

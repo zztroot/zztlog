@@ -1,0 +1,10 @@
+[zorm] [Info-] 2021/04/06 01:19:05 main.go:18 [main.main] 123456
+[zorm] [Info-] 2021/04/06 01:19:05 main.go:19 [main.main] 我+你
+[zorm] [Debug] 2021/04/06 01:19:05 main.go:20 [main.main] 123456
+[zorm] [Debug] 2021/04/06 01:19:05 main.go:21 [main.main] 我+你
+[zorm] [Error] 2021/04/06 01:19:05 main.go:22 [main.main] 123456
+[zorm] [Error] 2021/04/06 01:19:05 main.go:23 [main.main] 我+你
+[zorm] [Fatal] 2021/04/06 01:19:05 main.go:24 [main.main] 123456
+[zorm] [Fatal] 2021/04/06 01:19:05 main.go:25 [main.main] 我+你
+[zorm] [Warn-] 2021/04/06 01:19:05 main.go:26 [main.main] 123456
+[zorm] [Warn-] 2021/04/06 01:19:05 main.go:27 [main.main] 我+你
