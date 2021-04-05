@@ -54,7 +54,7 @@ package main
 import "github.com/zztroot/zztlog"
 
 func main() {
-	//配置，如果不配置将输出默认格式
+	//通过文件配置
 	if err := zztlog.InitConfig("zztlog.json"); err != nil {
 		zztlog.Error(err)
 		return
@@ -68,7 +68,7 @@ func main() {
 	loggler.Info(456789)
 	loggler.Error("sdfdsfsdffffffffffff")
 
-	//也可以直接使用
+	//如果什么配置都不做，也可以直接使用，但格式默认
 	zztlog.Info(123)
 	zztlog.Error(456545646)
 	zztlog.ErrorF(`%s`, "你是我的眼睛")
