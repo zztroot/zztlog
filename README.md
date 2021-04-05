@@ -59,6 +59,9 @@ func main() {
 		zztlog.Error(err)
 		return
 	}
+	
+	//通过结构体配置
+	zztlog.InitConfig(zztlog.BaseConfig{LogConfig:zztlog.LogConfig{DebugOutput: true, ErrorOutput: true, CmdOutput: true, ColourOutput: true}})
 
 	//可以获取结构体
 	loggler := zztlog.Default()
