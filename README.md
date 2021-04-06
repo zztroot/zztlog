@@ -13,6 +13,7 @@ go get github.com/zztroot/zztlog
     "save_file_name": "log/zztlog.log",
     "time_format": "2006/01/02 15:04:05",
     "max_size_m":1,
+    "max_file_line": 0,
     "prefix": "[测试]",
     "file_output": true,
     "cmd_output": true,
@@ -31,6 +32,7 @@ go get github.com/zztroot/zztlog
 file_output: 是否输出到文件(默认为false)  
 save_file_name: 写入文件的名称(默认zztlog.log)  
 max_size_m: 写入文件的最大大小，单位M，当达到最大时将会写入新的日志文件中。(默认大小10M)    
+max_file_line: 文件行数切割，(为0表示不通过文件行数切割，默认为0)，此项如果打开，max_size_m设置将自动忽略。
 
 #### 写入终端相关:
 cmd_output: 是否输出到终端(默认为true)  
