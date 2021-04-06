@@ -30,7 +30,7 @@ go get github.com/zztroot/zztlog
 #### 写入文件相关:
 file_output: 是否输出到文件(默认为false)  
 save_file_name: 写入文件的名称(默认zztlog.log)  
-max_size_m: 写入文件的最大大小，单位M，当达到最大时将会写入新的日志文件中。(默认大小100M)    
+max_size_m: 写入文件的最大大小，单位M，当达到最大时将会写入新的日志文件中。(默认大小10M)    
 
 #### 写入终端相关:
 cmd_output: 是否输出到终端(默认为true)  
