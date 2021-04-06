@@ -1,8 +1,9 @@
 {
   "log_config": {
-    "save_file_name": "zztlog.log",
+    "save_file_name": "log/zztlog.log",
     "time_format": "2006/01/02 15:04:05",
     "max_size_m":1,
+    "max_file_line": 1000,
     "prefix": "[zorm]",
     "file_output": true,
     "cmd_output": true,

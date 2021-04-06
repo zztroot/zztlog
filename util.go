@@ -1,6 +1,7 @@
 package zztlog
 
 import (
+	"bufio"
 	"github.com/gookit/color"
 	"io"
 	"log"
@@ -14,10 +15,11 @@ import (
 )
 
 type logHandler struct {
-	m      sync.Mutex
-	out    io.Writer
-	buf    []byte
-	isInit bool
+	m           sync.Mutex
+	out         io.Writer
+	buf         []byte
+	isInit      bool
+	currentLine int64
 }
 
 type BaseConfig struct {
@@ -31,6 +33,7 @@ type LogConfig struct {
 	CmdOutput         bool   `json:"cmd_output"`
 	FileAllPathOutput bool   `json:"file_all_path_output"`
 	FuncNameOutput    bool   `json:"func_name_output"`
+	MaxFileLine       int64  `json:"max_file_line"`
 	MaxSizeM          int64  `json:"max_size_m"`
 	SaveFileName      string `json:"save_file_name"`
 	ErrorOutput       bool   `json:"error_output"`
@@ -111,7 +114,6 @@ func (l *logHandler) initConfig() {
 	config.LogConfig.ErrorOutput = true
 	config.LogConfig.DebugOutput = true
 	config.LogConfig.CmdOutput = true
-	config.LogConfig.MaxSizeM = 100
 	config.LogConfig.TimeFormat = "2006-01-02 15:04:05"
 }
 
@@ -175,10 +177,20 @@ func (l *logHandler) outputFile() {
 	var setSize int64
 	var fileSize int64
 	if !os.IsNotExist(e) {
-		setSize = config.LogConfig.MaxSizeM * 1024 * 1024
+		if l.currentLine == 0 {
+			l.currentLine = fileLineNumber(fileName)
+		} else {
+			l.currentLine++
+		}
+		if config.LogConfig.MaxSizeM != 0 {
+			setSize = config.LogConfig.MaxSizeM * 1024 * 1024
+		} else {
+			setSize = 10 * 1024 * 1024
+		}
 		fileSize = fileInfo.Size()
 	} else {
 		fileSize = -1
+		l.currentLine = 1
 	}
 	var paths string
 	if strings.Contains(fileName, "/") {
@@ -191,16 +203,52 @@ func (l *logHandler) outputFile() {
 			}
 		}
 	}
-	if fileSize >= setSize {
-		err := os.Rename(fileName, paths+"/"+nowName+".log")
+
+	if config.LogConfig.MaxFileLine != 0 {
+		fileCutting(l.currentLine, config.LogConfig.MaxFileLine, fileName, paths, nowName)
+		if l.currentLine >= config.LogConfig.MaxFileLine {
+			l.currentLine = 0
+		}
+		return
+	}
+	fileCutting(fileSize, setSize, fileName, paths, nowName)
+}
+
+//文件切割
+func fileCutting(a, b int64, fileName, paths, nowName string){
+	m := sync.Mutex{}
+	m.Lock()
+	defer m.Unlock()
+	if a >= b {
+		var err error
+		if paths != "" {
+			err = os.Rename(fileName, paths+"/"+nowName+".log")
+		}else {
+			err = os.Rename(fileName, nowName+".log")
+		}
 		if err != nil {
-			log.Println("Failed to change file name")
+			log.Panic(err)
 			return
 		}
 		createFile(fileName)
-	} else {
+	}else {
 		createFile(fileName)
 	}
+}
+
+func fileLineNumber(path string) int64 {
+	file, err := os.Open(path)
+	if err != nil {
+		log.Panic(err)
+		return 0
+	}
+	defer file.Close()
+	fileScanner := bufio.NewScanner(file)
+	var lineCount int64
+	for fileScanner.Scan() {
+		lineCount++
+	}
+	return lineCount
 }
 
 func createFile(fileName string) {
