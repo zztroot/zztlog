@@ -57,7 +57,7 @@ import "github.com/zztroot/zztlog"
 
 func main() {
 	//通过文件配置
-	if err := zztlog.InitConfig("zztlog.json"); err != nil {
+	if err := zztlog.InitConfigFile("zztlog.json"); err != nil {
 		zztlog.Error(err)
 		return
 	}
