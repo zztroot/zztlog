@@ -1,7 +1,7 @@
 package zztlog
 
 const (
-	err = "Error"
+	err   = "Error"
 	debug = "Debug"
 	fatal = "Fatal"
 	info  = "Info-"

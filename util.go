@@ -20,6 +20,7 @@ type logHandler struct {
 	buf         []byte
 	isInit      bool
 	currentLine int64
+	newFileName string
 }
 
 type BaseConfig struct {
@@ -168,30 +169,30 @@ func (l *logHandler) outputCmd(name string) {
 }
 
 func (l *logHandler) outputFile() {
-	nowName := time.Now().Format("20060102150405")
 	fileName := "zztlog.log"
 	if config.LogConfig.SaveFileName != "" {
 		fileName = config.LogConfig.SaveFileName
+	}
+	if l.newFileName != "" {
+		fileName = l.newFileName
 	}
 	fileInfo, e := os.Stat(fileName)
 	var setSize int64
 	var fileSize int64
 	if !os.IsNotExist(e) {
-		if l.currentLine == 0 {
-			l.currentLine = fileLineNumber(fileName)
-		} else {
-			l.currentLine++
-		}
-		if config.LogConfig.MaxSizeM != 0 {
-			setSize = config.LogConfig.MaxSizeM * 1024 * 1024
-		} else {
-			setSize = 10 * 1024 * 1024
-		}
+		l.currentLine = fileLineNumber(fileName)
 		fileSize = fileInfo.Size()
 	} else {
 		fileSize = -1
-		l.currentLine = 1
+		l.currentLine++
 	}
+	// 文件大小初始化
+	if config.LogConfig.MaxSizeM != 0 {
+		setSize = config.LogConfig.MaxSizeM * 1024 * 1024
+	} else {
+		setSize = 10 * 1024 * 1024
+	}
+	// 切割路径
 	var paths string
 	if strings.Contains(fileName, "/") {
 		t := strings.Split(fileName, "/")
@@ -199,39 +200,32 @@ func (l *logHandler) outputFile() {
 			if paths == "" {
 				paths = v
 			} else {
-				paths = paths + "/" + v
+				paths = paths + string(os.PathSeparator) + v
 			}
 		}
 	}
 
 	if config.LogConfig.MaxFileLine != 0 {
-		fileCutting(l.currentLine, config.LogConfig.MaxFileLine, fileName, paths, nowName)
+		l.fileCutting(l.currentLine, config.LogConfig.MaxFileLine, fileName, paths)
 		if l.currentLine >= config.LogConfig.MaxFileLine {
 			l.currentLine = 0
 		}
 		return
 	}
-	fileCutting(fileSize, setSize, fileName, paths, nowName)
+	l.fileCutting(fileSize, setSize, fileName, paths)
 }
 
-//文件切割
-func fileCutting(a, b int64, fileName, paths, nowName string){
+// 文件切割
+func (l *logHandler) fileCutting(a, b int64, fileName, paths string) {
 	m := sync.Mutex{}
 	m.Lock()
 	defer m.Unlock()
 	if a >= b {
-		var err error
-		if paths != "" {
-			err = os.Rename(fileName, paths+"/"+nowName+".log")
-		}else {
-			err = os.Rename(fileName, nowName+".log")
-		}
-		if err != nil {
-			log.Panic(err)
-			return
-		}
+		// 创建新的文件
+		fileName = paths + string(os.PathSeparator) + time.Now().Format(config.LogConfig.TimeFormat) + ".log"
+		l.newFileName = fileName
 		createFile(fileName)
-	}else {
+	} else {
 		createFile(fileName)
 	}
 }
@@ -252,7 +246,10 @@ func fileLineNumber(path string) int64 {
 }
 
 func createFile(fileName string) {
-	file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
+	if !strings.HasPrefix(fileName, "/") {
+		fileName = string(os.PathSeparator) + fileName
+	}
+	file, err := os.OpenFile(fileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		log.Panic(err)
 		return
