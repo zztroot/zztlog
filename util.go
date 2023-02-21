@@ -193,22 +193,7 @@ func (l *logHandler) outputFile() {
 	} else {
 		setSize = 10 * 1024 * 1024
 	}
-	// 切割路径
 	paths := filepath.Dir(fileName)
-	//if strings.Contains(fileName, "/") {
-	//	if string(fileName[0]) != "." {
-	//		fileName = "." + fileName
-	//	}
-	//	t := strings.Split(fileName, "/")
-	//	for _, v := range t[:len(t)-1] {
-	//		if paths == "" {
-	//			paths = v
-	//		} else {
-	//			paths = paths + string(os.PathSeparator) + v
-	//		}
-	//	}
-	//}
-
 	if config.LogConfig.MaxFileLine != 0 {
 		l.fileCutting(l.currentLine, config.LogConfig.MaxFileLine, fileName, paths)
 		if l.currentLine >= config.LogConfig.MaxFileLine {
