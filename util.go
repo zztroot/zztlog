@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -193,17 +194,20 @@ func (l *logHandler) outputFile() {
 		setSize = 10 * 1024 * 1024
 	}
 	// 切割路径
-	var paths string
-	if strings.Contains(fileName, "/") {
-		t := strings.Split(fileName, "/")
-		for _, v := range t[:len(t)-1] {
-			if paths == "" {
-				paths = v
-			} else {
-				paths = paths + string(os.PathSeparator) + v
-			}
-		}
-	}
+	paths := filepath.Dir(fileName)
+	//if strings.Contains(fileName, "/") {
+	//	if string(fileName[0]) != "." {
+	//		fileName = "." + fileName
+	//	}
+	//	t := strings.Split(fileName, "/")
+	//	for _, v := range t[:len(t)-1] {
+	//		if paths == "" {
+	//			paths = v
+	//		} else {
+	//			paths = paths + string(os.PathSeparator) + v
+	//		}
+	//	}
+	//}
 
 	if config.LogConfig.MaxFileLine != 0 {
 		l.fileCutting(l.currentLine, config.LogConfig.MaxFileLine, fileName, paths)
@@ -220,9 +224,21 @@ func (l *logHandler) fileCutting(a, b int64, fileName, paths string) {
 	m := sync.Mutex{}
 	m.Lock()
 	defer m.Unlock()
+	// 如果目录不存在，创建
+	if paths != "" {
+		if _, err := os.Stat(paths); os.IsNotExist(err) {
+			if err = os.MkdirAll(paths, os.ModePerm); err != nil {
+				log.Panic(err)
+				return
+			}
+		}
+	}
 	if a >= b {
 		// 创建新的文件
-		fileName = paths + string(os.PathSeparator) + time.Now().Format(config.LogConfig.TimeFormat) + ".log"
+		fileName = time.Now().Format(config.LogConfig.TimeFormat) + ".log"
+		if paths != "" {
+			fileName = paths + string(os.PathSeparator) + fileName
+		}
 		l.newFileName = fileName
 		createFile(fileName)
 	} else {
@@ -246,9 +262,6 @@ func fileLineNumber(path string) int64 {
 }
 
 func createFile(fileName string) {
-	if !strings.HasPrefix(fileName, "/") {
-		fileName = string(os.PathSeparator) + fileName
-	}
 	file, err := os.OpenFile(fileName, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
 	if err != nil {
 		log.Panic(err)
