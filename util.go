@@ -150,15 +150,15 @@ func (l *logHandler) outputCmd(name string) {
 	if config.LogConfig.ColourOutput {
 		switch name {
 		case debug:
-			temp = []byte(color.Cyan.Sprintf(string(l.buf)))
+			temp = []byte(color.Cyan.Sprint(string(l.buf)))
 		case err:
-			temp = []byte(color.Magenta.Sprintf(string(l.buf)))
+			temp = []byte(color.Magenta.Sprint(string(l.buf)))
 		case fatal:
-			temp = []byte(color.Red.Sprintf(string(l.buf)))
+			temp = []byte(color.Red.Sprint(string(l.buf)))
 		case info:
-			temp = []byte(color.Green.Sprintf(string(l.buf)))
+			temp = []byte(color.Green.Sprint(string(l.buf)))
 		case warn:
-			temp = []byte(color.Yellow.Sprintf(string(l.buf)))
+			temp = []byte(color.Yellow.Sprint(string(l.buf)))
 		}
 	} else {
 		temp = l.buf
